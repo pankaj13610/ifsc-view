@@ -7,4 +7,8 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'ifsc-view';
+  code = '';
+  search() {
+    console.log(`Seaching for ${this.code}`);
+  }
 }
