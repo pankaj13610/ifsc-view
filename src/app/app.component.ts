@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+
 import { IFSCResponse } from './ifsc-response';
 @Component({
   selector: 'app-root',
@@ -6,28 +8,23 @@ import { IFSCResponse } from './ifsc-response';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
+
+  constructor(private http: HttpClient) { }
+
   code = '';
-  result: IFSCResponse = {
-    CENTRE: 'NA',
-    STATE: 'KARNATAKA',
-    DISTRICT: 'MANGALORE',
-    SWIFT: '',
-    MICR: 'NA',
-    BRANCH: 'Karnataka Bank IMPS',
-    CONTACT: '2228222',
-    NEFT: true,
-    CITY: 'DAKSHINA KANNADA',
-    RTGS: false,
-    UPI: true,
-    IMPS: true,
-    ADDRESS:
-      'REGD. & HEAD OFFICE, P.B.NO.599, MAHAVEER CIRCLE, KANKANADY, MANGALORE - 575002',
-    BANK: 'Karnataka Bank',
-    BANKCODE: 'KARB',
-    IFSC: 'KARB0000001',
-  };
+  result: IFSCResponse = null;
 
   search() {
+    this.http.get<IFSCResponse>(`https://ifsc.razorpay.com/${this.code}`).subscribe({
+      next: data => {
+        this.result = data;
+      },
+      error: error => {
+        this.result = null
+        alert(`${error.status} ${error.statusText}`);
+        console.error('There was an error!', error);
+      }
+    });
     console.log(`Seaching for ${this.code}`);
   }
 }
