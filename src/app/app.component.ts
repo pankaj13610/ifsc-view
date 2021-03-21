@@ -13,16 +13,17 @@ export class AppComponent {
 
   code = '';
   result: IFSCResponse = null;
+  errorMessage: string = null;
 
   search() {
     this.http.get<IFSCResponse>(`https://ifsc.razorpay.com/${this.code}`).subscribe({
       next: data => {
         this.result = data;
+        this.errorMessage = null
       },
       error: error => {
         this.result = null
-        alert(`${error.status} ${error.statusText}`);
-        console.error('There was an error!', error);
+        this.errorMessage = `${error.status} ${error.statusText}`;
       }
     });
     console.log(`Seaching for ${this.code}`);
